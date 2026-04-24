@@ -1,0 +1,302 @@
+LECTURE 12 — Filmmaking Principles: Storyboarding, Interpolations & Prompting
+Date: 18 April 2026 | Instructor: Pranay | Platform: FreePik Spaces (Cinematic Shot)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE QUESTION THIS LECTURE ANSWERS:
+"You can generate images and videos. But how do you turn a blank
+canvas into a coherent 30-40 second ad film?"
+Answer: Filmmaking principles — narrative first, storyboard each shot,
+generate assets systematically, interpolate transitions, combine in sequence.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SESSION CONTEXT]
+- Over-the-shoulder session (Pranay builds an ad live, students watch + learn)
+- Session is less structured teaching, more watching a professional think out loud
+- Ad concept: Monster drinks energy drink → becomes more destructive
+  (a man offers King Kong an energy drink; he destroys the city harder)
+- Most-asked skill in 100xEngineers recruitment pipeline
+- Companies like Ogilvy actively hiring for this skill
+- Capstone note: mid-cohort capstone = individual (not group)
+- A prompting guide / notion doc to be shared on Discord
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEWS (Quick)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Claude Opus 4.7 released
+- Claude Design released
+- HTML Canvas with Interactive Canvas released on Claude
+- Perplexity Computer updated — now closer to Claude Computer Use
+- Higgsfield account was temporarily suspended (content violation)
+- CDance 2.0 dominating the video space
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — CINEMATIC SHOT NODE (New Node Introduced)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What it is: A specialized image generator node in FreePik
+that gives you camera configuration controls instead of model selection.
+Think of it as: your virtual camera crew.
+Likely running Imagen 2 under the hood (based on output aesthetics).
+
+Also accessible via: FreePik Home → "All Tools" → "Cinematic Shot" → pin it.
+
+4 Camera Settings (this is the core of this section):
+
+1. CAMERA (Film Stock)
+   Controls color tone and dynamic range of the output.
+   
+   Options:
+   - Standard: default, prompt-dependent output
+   - Cinema Digital 35mm: modern Hollywood look, high dynamic range, rich colors
+   - 70mm Film: grainy texture (Christopher Nolan aesthetic), warm grain
+   - 35mm Film: classic cinematic look
+   - 8mm Film: heavy grain, warm tone — retro/vintage movie feel
+   - Camcorder: Y2K / 2000s aesthetic (Mr. Bean era look)
+   - Medium Format Film: standard modern camera, clean, professional
+   - Lo-Fi Toy Camera: high contrast, cheap plastic camera aesthetic,
+     extreme color distortion (Lomo-style)
+
+2. LENS (Optical Character)
+   Controls how the lens filters light — adds optical "personality."
+   
+   Options:
+   - Standard Lens: clean glass, no distortion, no character
+   - Prime Lens: extremely sharp focus on subject (recommended by Pranay)
+   - Anamorphic: oval bokeh (cinematic widescreen feel)
+   - Classic Planar Prime: similar to prime, smooth bokeh, no distortion
+   - Vintage Aspherical: soft edges, darker colors at edges — old TV look
+   - Medium Format: good background separation, subject clear
+   - Medium Format Smooth: soft focus roll-off in background
+
+3. FOCAL LENGTH (Field of View / Perspective)
+   Controls HOW MUCH of the world is in your frame.
+   
+   14–24mm (Ultra-Wide):
+   - Massive establishing shots, grand environments
+   - Low-angle establishing shots
+   - Use for: "show me the whole world"
+   
+   35mm (Medium-Wide):
+   - Subject grounded in environment
+   - Both subject and background in detail
+   - Closest to human peripheral vision
+
+   50mm (Normal):
+   - Mimics human eye
+   - Zero distortion, realistic portrait
+   - Background starts to blur slightly
+
+   85–135mm (Telephoto):
+   - Isolates subject, blurs background (bokeh)
+   - Use for: close-up emotional shots, faces
+
+   200mm+ (Extreme Tele):
+   - Background is abstract/magnified and blurred out
+   - Only subject in frame, background unrecognizable
+
+   Rule: LOWER focal length = WIDER shot.
+   HIGHER focal length = NARROWER, more isolated shot.
+
+4. APERTURE (Depth of Field)
+   Controls what is in focus and what is blurred.
+   Think of it as: "how much of the scene is sharp."
+   
+   F1.2 (Ultra-Shallow):
+   - Eyelashes sharp, everything else blurs immediately
+   - Use for: extreme macro shots, eye close-ups
+   
+   F2–F2.8:
+   - Subject in focus, background creamy blur
+   - Classic portrait look
+   
+   F4–F5.6:
+   - Subject sharp, background partially blurred
+   - Standard "person + environment"
+   
+   F8:
+   - Most things in focus
+   - Good general use
+   
+   F11–F16:
+   - Everything sharp, wide depth of field
+   - Use for: wide landscape shots, everything must be clear
+
+   Rule: LOWER aperture = SHALLOWER depth of field (more blur).
+   HIGHER aperture = DEEPER depth of field (everything sharp).
+
+Focal length vs. Aperture — the distinction:
+- Focal length = field of view (how wide or narrow your frame is)
+- Aperture = depth of field (how much of the frame is in focus)
+Both can blur the background, but from different mechanisms.
+Mechanical truth: focal length = how far the lens is from sensor.
+Aperture = how open the iris of the lens is.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — THE FILMMAKING PROCESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This is Pranay's actual process — start here every time you have to make a film.
+
+PHASE 1 — NARRATIVE (Before touching any tool)
+Compress your story into ONE LINE.
+Example: "If a monster drinks Monster Energy drink, he becomes more destructive."
+That one line = your creative north star. Every shot decision comes from it.
+
+Storytelling frameworks (choose one or combine):
+- Three-Act Structure: Setup → Confrontation → Resolution
+- Hero's Journey: Ordinary world → Call to action → Transformation
+- Save the Cat (Beat Sheet): Commercial storytelling method, hook-focused
+- In Medias Res: Open in the middle of action (Christopher Nolan's method)
+  Jump cut backwards and forwards in time. Attention-grabbing from frame 1.
+
+PHASE 2 — CHARACTER & LOCATION SETUP
+Before generating any scene, lock your characters and environments.
+Why: if you change characters mid-way, consistency breaks.
+
+For each character:
+- Generate front-facing image
+- Generate T-pose (captures full body anatomy, clothing, proportions)
+- Generate side profile
+- Generate contextual/emotional shots as needed
+
+For each location:
+- Generate a master establishing shot (wide, 14–24mm, F11)
+- Generate alternative angles (low angle, eye level, drone)
+- Keep location generation consistent — use the establishing shot as reference
+
+PHASE 3 — STORYBOARD GENERATION
+Each storyboard frame = one shot in your final film.
+Build each frame as a separate image in FreePik Spaces.
+Combine character references + location references in each shot image.
+This IS your visual storyboard — AI-generated storyboard frames.
+
+How to storyboard the Monster Energy example:
+Shot 1 — Establishing: King Kong huge against city skyline, destroying buildings
+Shot 2 — Mid-shot: King Kong sitting, looking tired among ruins
+Shot 3 — Close-up: Man approaches, holds up energy drink (product)
+Shot 4 — Close-up: King Kong's face as he reaches for drink
+Shot 5 — Wide: King Kong drinks the can
+Shot 6 — Wide: King Kong erupts with new energy, destruction escalates
+
+PHASE 4 — GENERATING SCENE IMAGES
+For each storyboard frame:
+- Use a separate Image Generator node (or one per scene)
+- Rename each node "Shot 1", "Shot 2" etc. for clarity
+- Connect relevant character references + location references
+- Set aspect ratio: 16:9 for landscape video
+- Match camera settings to the shot mood:
+  Establishing → wide focal (14–24mm), F11
+  Close-up face → tight focal (85–135mm), F2.8
+  Dramatic hero moment → anamorphic lens, 50mm
+
+PHASE 5 — VIDEO GENERATION (Interpolation)
+Turn storyboard images into video clips.
+
+Two core video strategies:
+
+STRATEGY 1 — DIRECT PROMPTING
+Feed a single image as the start frame.
+Write a motion prompt: "King Kong reaches for the drink, hand extending slowly"
+Model: Kling 3.0 or CDance 2.0
+
+STRATEGY 2 — INTERPOLATION (Start + End Frame)
+Feed Shot 1 image as START and Shot 2 image as END.
+Model creates the transition motion between the two.
+Use this when: you need a character to move from one specific pose to another.
+Use direct prompting when: you want more creative freedom in the motion.
+
+Note from Pranay: When using interpolation with references,
+realism can decrease. For photorealistic outputs, use direct prompting.
+For controlled transitions, use interpolation.
+
+PHASE 6 — COMBINING VIDEO CLIPS
+Use the VIDEO COMBINER node in FreePik Spaces.
+Connects multiple video outputs in sequence.
+Set sequence order at the bottom of the node.
+Final output: your assembled ad film.
+
+For transitions between clips (fade, cut, zoom):
+Do NOT try to handle transitions in AI prompts — results are inconsistent.
+Use traditional editing software: CapCut, Premiere Pro, Final Cut Pro.
+CapCut can even add transitions, captions (auto-captions via AI).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — WHAT PRANAY BUILT LIVE (The Ad)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Character 1 — Human Man
+- Man in his 20s, light complexion, dark hair, basic attire
+- Generated: front-facing, side profile, T-pose
+
+Character 2 — King Kong (the monster)
+- "Image of a massive gorilla, studio lighting, front facing,
+  deep single scar line from forehead to cheeks"
+- Generated: front-facing, side profile, T-pose with big hands
+
+Location
+- Scene 1: daytime drone shot, Manhattan-style city with skyscrapers
+  (16mm, F11, cinematic shot mode)
+- Scene 2: destroyed city, rubble and debris, dark-themed, cloudy, low angle
+
+Product
+- Pre-made energy drink image uploaded (no need to generate — real photo)
+
+Storyboard → Images → Videos → Combined:
+~31-second final ad
+~4,445 credits for the full workflow run
+Quality self-assessment from Pranay: "First 10 seconds are polished,
+last section was rushed. The drone shot I'd redo."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — PROMPTING GUIDE (Key Principles)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For image prompts in a film workflow:
+- Always specify: subject + action + environment + camera angle + mood
+- Reference ALL key assets via connected nodes + @ syntax
+- Say "THE camera" not "a camera" for UGC-style facing shots
+- Use cinematic vocabulary: "low angle", "drone shot", "establishing shot",
+  "close-up", "rack focus", "bokeh"
+
+Pranay's prompting guide (Notion doc):
+Will be shared on Discord after the session and uploaded to LMS later.
+Described as a comprehensive reference for this module.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — COMFYUI DEPLOYMENT (Bonus Mention)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pranay committed to a separate MASTERCLASS for deploying ComfyUI workflows
+as consumer-facing apps. Will cover both:
+- Easy method (wrapper approach)
+- Hard method (full custom deployment)
+Not covered in regular lecture slots.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+QUICK REFERENCE: CAMERA CHEAT SHEET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Shot Type          | Focal Length | Aperture | Use Case
+-------------------+--------------+----------+---------------------------
+Ultra-wide estab.  | 14–24mm      | F11–F16  | Grand establishing shots
+Medium env. shot   | 35mm         | F8       | Subject in scene, all visible
+Normal portrait    | 50mm         | F4–F5.6  | Realistic, slightly blurred bg
+Tight portrait     | 85–135mm     | F2–F2.8  | Face focus, creamy bokeh
+Extreme close-up   | 135–200mm    | F1.2–F2  | Macro, eye detail, ultra-blur
+Aerial/drone       | 16–24mm      | F8–F11   | Wide aerial perspective
+Dramatic action    | 50mm         | F2.8     | Subject isolated, bg suggestive
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Q&A HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Video from video generation: Kling 3.0 and CDance 2.0 support this
+  (next lecture will cover "Kling Avatar" — record yourself → someone else does it)
+- Transitions between scenes: use fade/cut in CapCut or Premiere Pro
+- Video Combiner sequence order: defined at the bottom of the node
+- Capstone project: mid-cohort = individual. Group projects for later.
+- Prompting guide: Notion doc shared on Discord (day after this session)
+- Can use your own face as the human character: yes, just upload your photo
+- All of this replicable without Spaces: each step separately, or Higgsfield templates
+  but Spaces = more flexibility + customizable
+- CDance Story + Claude skill integration seen on Discord — students experimenting
+- Real camera vs AI: separate audiences. AI = scale. Real = authenticity.

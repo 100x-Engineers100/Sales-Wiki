@@ -1,0 +1,228 @@
+LECTURE 6 — Flux LoRA Training
+Date: 28 March 2026 | Instructor: Pranay | Platform: JavasLabs + ComfyUI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE QUESTION THIS LECTURE ANSWERS:
+"IP Adapters don't guarantee face consistency — how do we actually
+train the model to know a specific person or product?"
+Answer: Fine-tune a LoRA on your subject's images. The model LEARNS
+your subject rather than just referencing it at inference time.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SESSION CONTEXT]
+- Sridev opened with AI news (below)
+- Pranay ran the full Flux workflow setup + attempted live LoRA training
+- Training hit a GPU/driver error on JavasLabs mid-session (live debugging)
+- A pre-recorded video was committed to Discord as the fix
+- Students were told: the harder sessions end here; everything forward gets easier
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEWS (Session Opener — Sridev)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TurboQuant (Google)
+- Extreme model compression without degrading output quality
+- Can run on local systems with less compute
+- Caused RAM company stocks to drop — less hardware demand
+- Google is pushing SLMs (Small Language Models) hard
+  → Models trained only on specific tasks: coding, copywriting, etc.
+
+Claude Mythos (Anthropic leak)
+- Anthropic accidentally released ~3,000 pages of docs
+- Pages referenced two unreleased models: "Mythos" and "Capybara"
+- Mythos described as more powerful than Opus 4.6
+- Not released publicly — security concerns (firewall exploitation risk)
+- Invite-only access only
+- Pranay's take: likely connected to US govt vs Anthropic conflict
+  over access to powerful models. Possibly ASI-adjacent capability.
+
+Tribelab V2 (Meta)
+- Trained to understand human neural activity
+- Zero-shot prediction of brain activity during complex tasks
+- Could be groundbreaking for medical treatment / neuroscience
+- Acts as a digital twin of human neural patterns
+
+Sora Shutdown
+- OpenAI burns ~$10B/month, $4B was just on Sora
+- Sora video app shut down for public use
+- Disney deal with OpenAI also cancelled
+- CDance 2.0 costs ~$2.5 per 5-second video vs. Sora's ~$1
+
+MIDO (AI World Engine)
+- Built by a teenager in China, open-source
+- Treats the world as a math equation
+- Predicts geopolitical future events based on historical patterns
+- Uses GraphRAG (students will learn this later in the cohort)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — FLUX MODEL: WHY IT'S DIFFERENT FROM SDXL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SDXL model files are "zip files":
+One checkpoint = model + CLIP + VAE packed together.
+Load Checkpoint node unpacks all three automatically.
+
+Flux model files are UNZIPPED:
+You load each of the three components SEPARATELY.
+
+The 3 nodes you need for Flux (replacing Load Checkpoint):
+
+1. LOAD DIFFUSION MODEL
+   - Select: "flux1-dev" (best model, ~24GB)
+   - IMPORTANT: Change weight_type to "fp8_e4m3fn_fast"
+     (This quantizes/compresses the model for GPU memory)
+   - Quantization = compressing a model to fit in available VRAM
+
+2. DUAL CLIP LOADER
+   - Flux uses TWO clip models (SDXL used one)
+   - Clip 1: "clip_l"
+   - Clip 2: "t5xxl"
+   - Set type and keep device as default
+
+3. LOAD VAE
+   - Select: "ae.safetensors" (Flux-specific VAE)
+   - DO NOT use the standard SDXL VAE
+
+Color-coded outputs match what Load Checkpoint output:
+  Purple = model, Yellow = CLIP, Red = VAE
+
+Additional Flux-specific node:
+FLUX GUIDANCE node
+- Placed BETWEEN positive CLIP prompt and KSampler
+- Recommended guidance value: 3.5
+- In KSampler: set CFG scale to 1 (not the usual 7)
+  This is because Flux handles guidance differently internally.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — WHAT IS A LoRA?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LoRA = Low-Rank Adaptation. Fine-tuning technique for diffusion models.
+You are not retraining the entire model (too expensive).
+You train a small adapter that modifies the model's understanding
+of a specific subject (a face, a product, an art style).
+
+Why LoRA > IP Adapter for consistency:
+- IP Adapter: image encoded as a prompt at inference time → approximate
+- LoRA: model LEARNS the subject during training → exact recall
+- After training, call the LoRA by trigger word in your prompt
+  e.g., "photo of SRIDEV in a jungle" → model knows who SRIDEV is
+
+Use cases:
+- Face LoRA: consistent person across unlimited images
+- Product LoRA: consistent product appearance (shape, label, color)
+- Style LoRA: consistent visual style (e.g., Amul girl aesthetic)
+- Brand LoRA: brand asset style replication
+
+Sridev's live example:
+Trained a LoRA on 40 Amul Girl comic images.
+Output: new Amul-style comics generated with correct character, style,
+even attempted fonts. Text wasn't perfect but aesthetic was preserved.
+This demonstrated "brand style generator" use case.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — LORA TRAINING SETUP (JavasLabs)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Platform: JavasLabs (GPU rental in browser)
+Recommended GPU: A6000 or A5000 — use these specifically
+
+Step-by-step (commands to be shared on Discord after session):
+
+1. Open terminal in JavasLabs
+2. Create a conda environment
+3. Activate the conda environment
+4. Install PyTorch (torch) — this is the deep learning framework
+   needed for training. Also used for LLM fine-tuning later.
+5. Clone the AI Toolkit repo (training framework)
+6. Install pip requirements: pip install -r requirements.txt --break-system-packages
+7. Create a .env file in the AI Toolkit folder
+   - Name the file exactly ".env"
+   - Add: HF_TOKEN=<your_huggingface_token>
+
+Getting a HuggingFace token:
+- Go to huggingface.co → Login → Profile → Access Tokens
+- Click Create New Token → select "write" permissions
+- Give it any name (e.g., "C7Live")
+- Copy token IMMEDIATELY — it only shows once
+- Paste into your .env file
+- Save a local copy of the token
+
+8. Log in to HuggingFace via terminal (paste token when prompted —
+   nothing will visibly appear, that's normal)
+9. Confirm "Login successful" + your username appears
+10. Run the training command (to be shared)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — LIVE DEBUG (What Happened + Fix)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Error encountered: "Media driver on your system is too old. Please update GPU driver."
+
+Root cause: The version of PyTorch installed was incompatible with
+the CUDA driver version on the A6000 in JavasLabs.
+Python version (3.10) also a contributing factor.
+
+Fix applied live: Uninstalled the torch version, installed a
+CUDA-compatible version for that specific driver.
+
+Lesson from Pranay: "This is what 70-80% of coding looks like.
+Error → investigate → fix → retry. That's debugging."
+
+Resolution: Updated commands + a pre-recorded working version
+to be shared on Discord/announcements.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — DATASET PREPARATION (Image Collection)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Key principle: Good training = good data. Garbage in, garbage out.
+
+For a face LoRA:
+- Collect 15-25 photos of the person
+- Include: different angles, different lighting, different expressions
+- Include: some full-body, some close-up, some with accessories
+- No heavy filters or edits
+- Caption each image (AI toolkit auto-captions, or write manually)
+
+For a product LoRA:
+- Photograph product from multiple angles
+- Different backgrounds, different lighting conditions
+- Include the product label clearly visible in enough shots
+- 15-20 images is sufficient sweet spot
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — FLUX ControlNets & Redux (IP Adapter)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Flux has its own ControlNet versions (not SDXL's):
+- Available: Canny and Depth only (not Open Pose, MLSD, etc.)
+- Loaded like LoRAs, not like SDXL ControlNets
+
+Flux IP Adapter equivalent: "Redux"
+- Works like IP Adapter but for Flux architecture
+- Use Redux when you want image-based prompting with Flux
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — LOADING WORKFLOWS FROM THE INTERNET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+How to use any ComfyUI workflow you find online:
+1. Download the workflow JSON file
+2. Drag and drop it into the ComfyUI canvas
+3. If nodes are missing → install via ComfyUI Manager
+4. Load the required models into the model folders
+5. Hit Run — navigate unknown nodes by reading their labels
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANNOUNCEMENTS / Q&A HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- First assignment releasing this week — based on SDXL (not LoRA)
+- Character consistency with seed: fix seed + define clothing, beard,
+  specific features in prompt — this was the expected approach
+- LoRA now supersedes seed-based consistency going forward
+- WAN 2.2 video model: preferred frame length = 121 frames (5 seconds)
+  Max ~138 frames before quality drops
+- SSH connection: advanced way to connect VS Code to JavasLabs GPU
+- For Comfy UI: no image generation limit on local system, only your GPU limits you
+- Pranay to host Discord voice sessions for hands-on debugging

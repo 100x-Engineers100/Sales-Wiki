@@ -1,0 +1,25 @@
+# ── Secrets & credentials ──────────────────────────────────────────────────
+.dev.vars
+*.env
+.env.*
+*.secret
+
+# ── Claude local settings ──────────────────────────────────────────────────
+.claude/settings.local.json
+
+# ── Obsidian user state ────────────────────────────────────────────────────
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# ── Node ───────────────────────────────────────────────────────────────────
+node_modules/
+dist/
+
+# ── Internal planning / session docs (not for public repo) ────────────────
+sales wiki/mcp-tool-quality-problem.md
+sales wiki/prompt - succes stories indgest.md
+sales wiki/docs/plans/2026-04-18-option-d-dynamic-wiki-search.md
+
+# ── OS noise ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

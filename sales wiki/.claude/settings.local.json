@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Read(//c/Users/visha/Downloads/100x Wiki/zeno-mcp-server/**)",
+      "WebSearch"
+    ]
+  }
+}

@@ -1,0 +1,156 @@
+LECTURE 9 — Intro to FreePik Spaces
+Date: 10 April 2026 | Instructor: Pranay | Platform: FreePik
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE QUESTION THIS LECTURE ANSWERS:
+"We spent weeks in the ComfyUI engine room learning fundamentals.
+Now we step into a production environment — how do we use that
+knowledge with best-in-class proprietary models quickly?"
+Answer: FreePik is the commercial production layer where your
+latent space / ControlNet / LoRA knowledge becomes directly useful.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SESSION CONTEXT]
+- Started 5 minutes late due to two Zoom links running simultaneously
+- FreePik credits being rolled out — students told they'd receive access
+- Platform: freepik.com — already includes most top models
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — WHAT IS FREEPIK?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pre-AI era: Stock image/video/illustration library.
+Post-AI era: Repositioned as an AI aggregator.
+
+What's an AI aggregator?
+A platform that takes the best AI models, pulls their APIs,
+and wraps them in a polished UI. Users don't need to manage
+models directly — they just choose and generate.
+
+Models currently available on FreePik:
+- Google Imagen 3 (NanaBanana)
+- Google Imagen 3 Pro
+- Google Imagen 2 (fast)
+- CDance 2.0 (just launched during this lecture week)
+- Flux 2.2 Pro
+- CDream 5 Lite
+- Kling 2.5 / 3.0 (video)
+- LTX 2 (video)
+- OpenAI Sora (until April 24th)
+
+Other aggregators like FreePik: Higgsfield, OpenArt, Genspark.
+FreePik chosen specifically because it has FreePik Spaces
+(node-based workflow interface — covered in Lecture 10).
+
+Why your ComfyUI knowledge gives you an edge here:
+Most users on FreePik just prompt and click.
+They don't understand: latent space, ControlNet, IP adapters,
+referencing, LoRA behavior. You do.
+That's where your leverage is — you can extract better results
+because you understand what's happening under the hood.
+
+Analogy from Pranay:
+"FreePik is like learning Framer (frontend builder with templates).
+ComfyUI was learning React/Next.js from scratch."
+Both valid — different levels of control.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — FREEPIK UI NAVIGATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Three things you need (pinned in left sidebar):
+1. Image Generator
+2. Video Generator
+3. Spaces (covered in Lecture 10)
+
+Image Generator:
+- Select model: click "Auto" → "All Models" → choose (Flux 2.2 Pro is fast, 21s)
+- Add style reference: click "Style" → these are pre-trained LoRAs
+  (Pastel Cartoon, Oil Painting, etc.)
+- Add character reference: upload a face image for character consistency
+  (equivalent to IP Adapter in ComfyUI)
+- Aspect ratio, resolution settings available
+- Tip: Imagen 3 Pro = best quality for images; CDream 5 Lite = fastest
+
+Style reference = what you now know as a LoRA.
+You're selecting a pre-trained style adapter — FreePik is just hiding
+the technical layer from you.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — VIDEO GENERATOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Models available: Kling 2.5, Kling 3.0, CDance 2.0, LTX 2, VO3 Lite
+
+Credit cost comparison (approximate):
+- Kling 2.5: ~250 credits / video
+- Kling 3.0 (5s, 720p, no audio): ~350 credits
+- CDance 2.0: most expensive (~$2.5/video externally)
+- Google VO3 Lite: cheapest option, uses fewest credits
+
+Direct API vs. FreePik pricing:
+- FreePik adds ~30-40% markup over direct API calls
+  Example: Kling on FreePik = ~$0.20/sec vs. direct API = ~$0.14/sec
+- For scale: use APIs directly. For learning/prototyping: FreePik fine.
+
+Tips:
+- Best image model on FreePik: Imagen 3 Pro (quality), CDream 5 Lite (speed)
+- Best video models: Kling 3.0 (balance), CDance 2.0 (quality ceiling)
+- For avatar/lip-sync: sync.ai (better facial expressions than HeyGen)
+  but more expensive
+- For voice cloning: 11Labs (audio only), CDance 2.0 (voice in video)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — LIVE DEMO: UGC-STYLE VIDEO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What was built:
+- Generated a product image (coffee-related product)
+- Generated a female character (UGC-style influencer)
+- Combined both as references in image generator
+  → Generated composite image of girl with product
+- Fed that composite image into video generator (Kling)
+- Output: raw iPhone-look UGC-style video
+
+Process shown manually step-by-step.
+Next lecture (Lecture 10): this exact workflow automated in Spaces.
+
+Video continuity example shown:
+A video where character opens a product wrapper → cuts to coffee mug.
+- Same dress color across all 3 scenes
+- Same product, same mug texture
+- Video continuity = character/object consistency maintained across cuts
+Pranay noted: this is solved in current top models.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — DATA PRIVACY NOTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Important: Any image you upload as reference on FreePik is processed
+on their servers. Any image given to Imagen 3 → goes to Google's servers.
+Any reference fed to GPT models → OpenAI's servers.
+
+This is why enterprises use ComfyUI locally:
+Sensitive product data, face data, brand assets — they don't want
+that leaving internal systems. Open-source local models = data stays yours.
+
+This is a key reason why ComfyUI is still the industry standard
+for any company with confidentiality requirements.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Q&A HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Video continuation with multiple frames: use start + end images in video node;
+  Series: Image1→Image2 → video, Image2→Image3 → video, chain them
+- Can you use reference images in Kling? Yes, covered later
+- Traditional camera vs AI video: internet will split into two tracks.
+  AI for scale. Real camera for authenticity/connection.
+- Template apps (social media "animate your photo" apps): same workflow,
+  just packaged. They charge premiums because users don't understand the pipeline.
+  You do — that's your advantage.
+- Best model for images: Imagen 3 Pro; for speed: CDream 5 Lite
+- Inpainting in FreePik: available under "Image Editor"
+- Can you build applications on top of FreePik? Not yet (as of this date).
+  Coming soon. Higgsfield has more templates if needed.
+- Credits in Spaces: entire UGC workflow from this session = ~1,300 credits
+- Commercial licensing: only on purchased plans (not gifted cohort credits)

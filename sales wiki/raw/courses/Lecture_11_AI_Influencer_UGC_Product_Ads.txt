@@ -1,0 +1,235 @@
+LECTURE 11 — AI Influencer & In-Depth UGC / Product Ads
+Date: 17 April 2026 | Instructor: Pranay (+ Sridev briefly) | Platform: FreePik Spaces
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE QUESTION THIS LECTURE ANSWERS:
+"How do you build a fully fictional AI influencer from scratch,
+and then generate content of that influencer selling a real product?"
+This lecture connects: character creation → product generation → UGC video output
+in a single automated pipeline.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SESSION CONTEXT]
+- Sridev's final live lecture in the module (leaving for Google Cloud Next / Adobe Summit)
+- Sorting ceremony happened at start of session (house assignments)
+- Session covered most-requested topic by students
+- Pranay noted: lectures from here are easiest in the module
+- Practice set releasing next day; capstone project briefed next week
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — SORTING CEREMONY (House System)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4 Houses (named after foundational AI models):
+
+AlphaGo — Entrepreneurship track + Code path
+Watson — Entrepreneurship track + No-code path
+Deep Blue — Career Accelerator track + Code path
+Liberatus — Career Accelerator track + No-code path
+
+Assignment was based on intake form. If placed incorrectly:
+tag support team in Discord to be moved.
+Deep Blue = default for students who didn't fill the intake form.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — WHY AI INFLUENCERS?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AI Influencer = a fictional digital persona with no human identity behind it.
+Runs social media, promotes products, appears consistent across all content.
+Distinct from AI twin (which IS based on a real person's face).
+
+What makes a good AI influencer:
+- Memorable, distinctive features (unusual hair color, eye color)
+  → Scroll-stopper visual design
+- Consistent appearance across all platforms and angles
+- Can be placed in any setting, any product, any scenario
+- No scheduling, no fees, no personal brand conflicts
+
+Real-world business model:
+Companies using this: AI social media pages with zero human behind them.
+Users see a video, image or reel — it looks real. They engage. They buy.
+The cohort students from C5 built Morphica — a wrapper app for exactly this.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — BUILDING AN AI INFLUENCER: STEP BY STEP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This process mirrors LoRA dataset preparation — you're creating
+a set of reference images the pipeline will use as character memory.
+
+STEP 1 — DEFINE THE CHARACTER CONCEPT
+Start with unusual, non-existent features to avoid stock photo hallucination.
+Example from session:
+"A man in his 20s with red hair, dark complexion, red eyes, plain studio background"
+Model used: Imagen 3 Pro (best quality + lowest hallucination rate)
+Keep refining with iterations — expect 3-5 generations before you like one.
+
+STEP 2 — GENERATE MULTI-ANGLE REFERENCE IMAGES (target: 9 images)
+Why 9+? Because when you generate content in new scenarios, the model
+needs multiple angular/emotional reference points. One image = the model
+guesses what side profile looks like → gets it wrong.
+
+Generate:
+- Front-facing close-up (base character)
+- Left side profile
+- Right side profile
+- Zoomed-out full body shot
+- T-pose (arms outstretched) — critical for capturing full anatomy
+  (hands, clothes, body proportions)
+- Emotion shots (screaming, smiling, surprised, neutral)
+- Contextual shots (in a cafe, at an event, on a stage)
+- Head facing different directions
+
+Tip: Each time you generate a new angle, use the original character
+image as the reference so it stays consistent.
+
+STEP 3 — SAVE ALL REFERENCE IMAGES
+Download all to a local folder named "AI Influencer — [Character Name]"
+These become your permanent character library.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — THE FULL AI INFLUENCER + PRODUCT AD PIPELINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What you're building: a Spaces workflow that takes character + product → 
+outputs a final UGC image of the influencer holding and selling the product.
+
+PIPELINE ARCHITECTURE:
+
+NODE COLUMN 1 — CHARACTER REFERENCES (5 images max recommended)
+- Upload nodes for: front-facing, side profile, emotion shot, full body, T-pose
+- All outputs connected as references to the main Image Generator
+
+NODE COLUMN 2 — PRODUCT GENERATION
+- Add a separate Image Generator node for the product
+- Prompt: "product photography of [product name], studio lighting,
+  clean minimal packaging, white background, [color]"
+- Generate product independently first
+- Take the output and connect it as a reference to the main Image Generator
+
+NODE COLUMN 3 — CLOTHING GENERATION (optional, for more control)
+- Add a separate Image Generator node for clothing
+- Prompt: "flat lay image of men's European fashion attire, basic home clothes"
+- Connect output as reference to main Image Generator
+
+NODE COLUMN 4 — BACKGROUND/ROOM (for controlled scene)
+- Add a separate Image Generator for the room
+- Prompt: "living room interior, Scandinavian style, glass windows, daytime, no humans"
+- Connect output as reference to main Image Generator
+
+FINAL IMAGE GENERATOR NODE — THE ASSEMBLY
+- All above references connected to this node
+- Model: Imagen 3 Pro
+- Use @ syntax in prompt to reference connected nodes:
+  "This person [@character] wearing [@clothing] holding [@product]
+  in one hand, the packet, in other hand a candy,
+  in a reference room [@room], speaking to THE camera, UGC style"
+  
+NOTE: Say "THE camera" not "a camera" — model interprets "a camera"
+as an object to hold. "THE camera" = speaking toward the viewer.
+
+Resolution: Generate at 1K first for speed, bump to 2K/4K once output is right.
+
+REFERENCE LIMITS:
+- Imagen 3 Pro: up to ~14 references
+- Most video models: up to 9 references
+- Count your connected nodes — disconnect unused references to stay under limit
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — USING THE AI ASSISTANT NODE FOR PROMPTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+When prompting becomes complex (many elements to combine):
+Use the AI Assistant node (GPT-4o Mini by default) to generate the prompt for you.
+
+Process:
+1. Add AI Assistant node to canvas
+2. Input text: describe what you want the final image to contain
+   (character + clothing + product + room + action + style)
+3. Get the text output → pipe it into the Image Generator prompt field
+4. Run
+
+Tip: The AI Assistant node uses the connected reference images as context.
+It will write a prompt that references them naturally.
+
+This is meta-prompting: using an LLM to write prompts for an image model.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — PRODUCT-SPECIFIC WORKFLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For physical products (supplement, drink, gadget):
+1. Generate the product independently with product photography prompt
+2. Or: use your real product photo as Upload node
+   (e.g., photograph the bottle yourself, upload it as reference)
+3. Connect to main Image Generator alongside character references
+
+For 2D product (a PDF, app interface):
+1. Use product image → generate 3D mockup with Imagen
+   ("create a realistic product mockup of this 2D design, studio lighting")
+2. Generate multiple product angles using the mockup image as reference
+3. Then use those angles as product references in the main pipeline
+
+For clothing brand ads:
+Same pipeline — swap product node with clothing photos.
+Character holds/wears the clothing.
+Scene + background remains consistent.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — VIDEO: AI INFLUENCER IN ACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After you have the final composite image:
+Add a Video Generator node (Kling 3.0 recommended for credit efficiency)
+→ Start image = final influencer+product image
+→ Prompt: "person speaking to camera enthusiastically, slight body movement, UGC style"
+
+Video reference vs. image reference:
+- CDance 2.0 and Kling 3.0 work well with video references
+- Video references give better motion consistency than image references
+- Experiment with both
+
+For multi-shot videos (series of scenes):
+Generate Image1, Image2, Image3 separately.
+Video 1: Image1 → Image2 (start and end frame = interpolation)
+Video 2: Image2 → Image3
+Video 3: Image3 → end
+Combine videos in post.
+
+Workflow to call character LoRA by name in Spaces:
+In Image Generator node → Add References → Select Reference → Add Character
+This allows you to call a trained character reference by name within the node.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8 — CREDIT STRATEGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Credits are finite in this cohort — use wisely.
+Pranay used ~10,000 credits building this session demo.
+
+Save credits by:
+- Using Imagen 2 for test generations (fast, fewer credits)
+- Use Imagen 3 Pro only when you have the prompt tuned
+- Use Kling 3.0 instead of CDance 2.0 for video (4x cheaper)
+- VO3 Lite: cheapest video option; safest for image+audio input
+- Generate at 1K resolution until output is right, then 2K/4K
+- Do not use the "Build Your Character" template in Spaces — expensive, low control
+
+Capstone project credits: additional credits coming for capstone work.
+Credits released in phases to prevent burning them all at once.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Q&A HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Can I control height/body structure/facial features? Yes — prompt it explicitly
+  Or use "Build Your Character" template in Spaces (credit-heavy)
+- OpenAI Sora 2 / Sora 2 Pro available on FreePik but deprecated April 24th
+- LTX 2.3 not available on FreePik (LTX 2 is)
+- CDance 1.5 was also good — can try it
+- Video references better than image references for motion consistency (CDance especially)
+- Adding culture/regional identity: add visual markers in prompt (e.g., turban)
+  or reference regional fashion images
+- When to use Comfy vs Spaces: Comfy = open source, local GPU, cost-zero at scale;
+  Spaces = proprietary, cloud, fast, best model quality
+- AI detectors: CDance 2.0 and Kling 3.0 outputs currently pass as real video

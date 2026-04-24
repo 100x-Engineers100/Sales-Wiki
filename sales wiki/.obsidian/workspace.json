@@ -1,0 +1,225 @@
+{
+  "main": {
+    "id": "31443d6e800a6a72",
+    "type": "split",
+    "children": [
+      {
+        "id": "e65370c3612dc996",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "346f8dee23f392ce",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "wiki/sources/zahids-calls-transcript.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "zahids-calls-transcript"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "45162805a6528af0",
+    "type": "split",
+    "children": [
+      {
+        "id": "5bb958f1a614554d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e0f75e16687decac",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "b9dcdf3f20a12aab",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "87aa9752307b06d0",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "right": {
+    "id": "0d64bbc992157810",
+    "type": "split",
+    "children": [
+      {
+        "id": "8abad7e26e8ce99b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "73139155fd2fe740",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "4726585013c01229",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "f2f6cc3fbb503797",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "5e39d59849e836c4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "820366e4d12026b5",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "346f8dee23f392ce",
+  "lastOpenFiles": [
+    "prompt - succes stories indgest.md",
+    "sales-mcp-server/bulk-upload.json",
+    "raw/documents/success-stories-c4.csv",
+    "image.png",
+    "sales-mcp-server/node_modules/electron-to-chromium/README.md",
+    "sales-mcp-server/node_modules/pkce-challenge/dist/index.node.js",
+    "sales-mcp-server/node_modules/pkce-challenge/dist/index.node.d.ts",
+    "sales-mcp-server/node_modules/pkce-challenge/dist/index.node.d.cts",
+    "sales-mcp-server/node_modules/pkce-challenge/dist/index.node.cjs",
+    "sales-mcp-server/node_modules/pkce-challenge/dist/index.browser.d.ts",
+    "sales-mcp-server/node_modules/pkce-challenge/dist/index.browser.js",
+    "sales-mcp-server/node_modules/pkce-challenge/dist",
+    "sales-mcp-server/node_modules/eventsource/dist/index.js.map",
+    "sales-mcp-server/node_modules/undici/lib/web/subresource-integrity/Readme.md",
+    "followup-prompt-session2.md",
+    "sales-mcp-server/node_modules/core-js-pure/stage/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/web/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/actual/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/full/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/internals/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/stable/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/modules/README.md",
+    "sales-mcp-server/node_modules/core-js-pure/es/README.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/best-practices/writing-tests.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/best-practices/undici-vs-builtin-fetch.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/best-practices/proxy.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/best-practices/mocking-request.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/best-practices/crawling.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/best-practices/client-certificate.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/api/WebSocket.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/api/Util.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/api/Socks5ProxyAgent.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/api/SnapshotAgent.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/api/RoundRobinPool.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/api/RetryHandler.md",
+    "sales-mcp-server/node_modules/undici/docs/docs/api/RetryAgent.md",
+    "sales-mcp-server/node_modules/miniflare/dist/local-explorer-ui/favicon.svg"
+  ]
+}

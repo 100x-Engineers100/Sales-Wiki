@@ -1,0 +1,53 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "sales-wiki-mcp",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-10",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"SalesWikiMCP"
+			]
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "MCP_OBJECT",
+				"class_name": "SalesWikiMCP"
+			}
+		]
+	},
+	"kv_namespaces": [
+		{
+			"binding": "SALES_WIKI",
+			"id": "8085d12226f842cd81e6369b9f90cedb",
+			"preview_id": "e2870826c8f64ecaa3bbd4280531b4fe"
+		},
+		{
+			// Required by workers-oauth-provider — stores tokens, grants, client registrations
+			"binding": "OAUTH_KV",
+			"id": "a50d951ca30742c793ae7d3833357f45"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	// 30 requests per 60s per IP — generous for normal use, blocks runaway loops
+	"ratelimits": [
+		{
+			"name": "MCP_RATE_LIMITER",
+			"namespace_id": "1001",
+			"simple": {
+				"limit": 30,
+				"period": 60
+			}
+		}
+	]
+	// POSTHOG_API_KEY is a Cloudflare secret — set with: wrangler secret put POSTHOG_API_KEY
+	// For local dev it is read from .dev.vars (gitignored)
+}

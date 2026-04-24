@@ -1,0 +1,209 @@
+LECTURE 5 — ControlNets, IP Adapters & Flux Intro
+Date: 27 March 2026 | Instructor: Pranay | Platform: ComfyUI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE QUESTION THIS LECTURE ANSWERS:
+"Prompting alone can't control the exact structure or style of an image —
+what other levers do we have?"
+Answer: ControlNet (structural guidance) and IP Adapters (image-as-prompt).
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SESSION CONTEXT]
+- Pranay started with a live rebuild of the basic text-to-image workflow
+  (Load Checkpoint → CLIP Text Encode (positive + negative) → KSampler →
+  Empty Latent Image → VAE Decoder → Preview Image)
+- Students built it together from memory — Socratic warm-up
+- Model used: SDXL (Juggernaut / RealisticVision). Flux covered at end.
+- Disclaimer: will only repeat steps twice — watch recordings for step-by-step
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — WHAT IS CONTROLNET?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Core Idea:
+ControlNet adds structural information into the diffusion process
+in a specific formatted image (not a text prompt). It overlays a
+preprocessed map onto the Gaussian noise before generation begins.
+Result: the generated image follows the structure of the reference,
+regardless of what text prompt you give it.
+
+Analogy used in class: "like a stencil" — the structure is locked,
+the style/content can change.
+
+How it works internally:
+1. Take a reference image
+2. Run a preprocessor → converts image to a structured "condition map"
+   (black background, white edges / stick figure / depth map etc.)
+3. This condition map is overlaid on the latent noise at each denoising step
+4. The model uses this overlay as structural guidance throughout generation
+
+Example shown: Reindeer image processed with Canny →
+same reindeer silhouette appeared in mountain, grass field, snow, forest
+— same structure, completely different scene.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — BUILDING A CONTROLNET WORKFLOW IN COMFYUI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3 New Nodes (added on top of basic text-to-image workflow):
+
+  1. LOAD IMAGE node
+     — brings in your reference image
+
+  2. PREPROCESSOR node (e.g., Canny Edge Preprocessor)
+     — converts image to the condition format
+     — resolution: always set to 1024 for SDXL
+     — Output: black background with white edge lines
+
+  3. APPLY CONTROLNET node
+     — sits BETWEEN the CLIP text prompts and the KSampler
+     — inputs: positive prompt, negative prompt, preprocessed image
+     — outputs: positive (modified), negative (modified)
+
+  4. LOAD CONTROLNET MODEL node
+     — loads the specific ControlNet model matching your preprocessor
+     — For Canny + SDXL: use "controlnet-canny-sdxl-1.0-mid"
+     — DO NOT use SD 1.5 models with SDXL
+
+Connection order:
+Load Image → Preprocessor → Apply ControlNet (image input)
+CLIP Pos → Apply ControlNet (positive in) → KSampler
+CLIP Neg → Apply ControlNet (negative in) → KSampler
+Load ControlNet Model → Apply ControlNet (model input)
+
+CRITICAL NOTE: Never connect Load Image DIRECTLY to Apply ControlNet.
+Always preprocess first.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — TYPES OF PREPROCESSORS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+All of these preprocessor nodes are already included in ComfyUI —
+no custom installs needed.
+
+CANNY EDGE
+- Extracts sharp, exact edges of the subject
+- White lines on black background
+- Best for: structure/pose replication
+
+SCRIBBLE
+- Extracts a rough, sketchy interpretation
+- Looser than Canny — more creative freedom in output
+- Good for: hand-drawn input → photorealistic output
+
+LINE ART
+- Similar to Canny but slightly rougher edges
+- Less exact than Canny, more defined than Scribble
+
+OPEN POSE
+- Detects human body pose → outputs a stick-figure skeleton
+- Best for: controlling pose of a person across different images
+
+MLSD (Straight-Line Detection)
+- Only detects perfectly straight lines (vertical/diagonal, not curves)
+- Only available for SD 1.5, not SDXL yet
+- Best for: interior design, architecture workflows
+- WHY: furniture curves are noise; you only need room dimensions
+
+DEPTH
+- Creates a depth map: closest objects = white, farthest = black
+- Previously used to fix hands before Flux
+- Now: useful for 3D composition control
+
+NORMAL MAP
+- Used to change surface texture or color of specific areas
+- Useful for material/surface manipulation
+
+SEGMENTATION
+- Segments objects from background
+- Better methods exist now, but good to know
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — CONTROLNET UNION MODEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Model: "ControlNet Union SDXL" (~4GB)
+- Supports all ControlNet types in one model
+- Output is decent but not as good as specialized models
+- Use individual models for production-quality work
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — IP ADAPTERS (Image Prompt Adapters)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Core Idea:
+IP Adapter = "Image Prompt Adapter"
+CLIP converts TEXT → machine language (tokens).
+IP Adapter converts IMAGE → machine language.
+The KSampler treats this image encoding as a prompt — not as structural guidance.
+
+Key Distinction:
+- ControlNet = structural guidance (pose, edges, depth) — structural
+- IP Adapter = image-as-prompt (style, character, content) — semantic
+DO NOT mix these up. They do completely different things.
+
+IP Adapter variants:
+- Standard IP Adapter: transfers overall style/character
+- IP Adapter Plus Face: focuses specifically on facial features
+  (Used when you want to transfer a person's face into a new scene)
+
+Loading Multiple Images for IP Adapter:
+- Search for "Image Batch Multi" node
+- Set count up to 5 images
+- Feed multiple reference images for stronger consistency
+
+Practical note: IP Adapter gives you a style/character influence.
+It does NOT guarantee 1:1 face accuracy. For face consistency,
+you need LoRA training (covered Lecture 6).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — INPAINTING WORKFLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use case: Change only one specific area of an existing image
+(example shown: replace a boy in a jungle with a girl, keep background)
+
+Steps:
+1. Load Image node (your base image)
+2. Replace "Empty Latent Image" with "VAE Encode for Inpainting" node
+   — has a MASK input
+3. Right-click on the image in Load Image node → "Open in Mask Editor"
+4. Paint a mask over the area to change → Save
+5. Set "grow_mask" to ~25 (controls how far mask bleeds)
+6. Update your prompt to describe the NEW content for masked area
+7. Connect: pixel → pixel, mask → mask
+8. VAE encodes the masked image → feeds to KSampler as latent
+
+Note: For best results, use a model trained specifically for inpainting.
+Regular diffusion models can inpaint but quality is lower.
+Segmentation ControlNet can also be used to auto-mask objects.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — SEED AND CONSISTENCY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seed = a random value assigned to the Gaussian noise starting point.
+If you fix the seed → same base noise → similar structure in all generations.
+Fix seed + vary only the prompt = consistent character across images
+(limited — LoRA is better for true consistency)
+
+Practice sets were designed around this: students had to figure out
+seed locking on their own as a hidden discovery.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+UPCOMING / ANNOUNCEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Flux workflow to be shared next session
+- Flux is a newer, better model than SDXL
+- Harder sessions only for next 2-3 weeks; after that: FreePik, closed-source tools, UGC ads, video models
+- Pranay to host Discord doubt-solving sessions
+- LTX 2.3 is currently best open-source video model (needs powerful GPU)
+- Sync Labs > HeyGen for avatar/lip-sync facial expressions
+- Morphica: wrapper app built by a C5 student (similar to Higgsfield)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SESSION POLL RESULT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Easy: 11% | Medium: 60% | Hard: 29%
+Most said "understood but need more practice" — Pranay committed to
+releasing more recorded material on ControlNet and IP Adapters.

@@ -1,0 +1,207 @@
+LECTURE 10 — Branding & Marketing Workflows in FreePik Spaces
+Date: 11 April 2026 | Instructor: Pranay (+ Sridev for news) | Platform: FreePik Spaces
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE QUESTION THIS LECTURE ANSWERS:
+"You've learned to do each step manually in FreePik — generate image,
+generate video. How do you chain those steps into an automated,
+repeatable content production pipeline?"
+Answer: FreePik Spaces — a node-based workflow interface where
+each step becomes a node, and the whole chain runs in one click.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SESSION CONTEXT]
+- Session from home (Sridev's home setup)
+- Credits for FreePik being finalized by Monday (billing delay with FreePik)
+- Practice set: build your own UGC workflow (released after session)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEWS (Sridev)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Netflix VOID model
+- Stands for: Video Object Interaction Deletion
+- Works like SAM2 (segmentation) but on video frames
+- Removes objects from scenes without reshooting
+- Target use: post-production for filmmakers
+  (e.g., remove unwanted object that crept into a shot)
+- No public usage announced yet
+
+CIA Ghost Murmur
+- Technology that located a downed F-15 pilot in Iranian mountains
+  after 40 hours missing, using heartbeat detection
+- Uses Quantum Magnetometry: detects weak electromagnetic signals
+- AI processes drone-captured data, cancels strong electromagnetic noise,
+  isolates the heart's weak signal to confirm the pilot is alive
+- Interesting non-creative AI use case
+
+OpenAI new funding round
+- Another round raised — gives runway to 2029
+- Models slipping behind Google and Claude in multiple categories
+- Sora shut down. Disney deal cancelled.
+- IPO talk: ~$1 trillion market cap target this year
+- Summary: "They're in panic mode — Google wins image/video, Claude wins everything else"
+
+OpenAI new image model (discovered on LM Arena)
+- Leaderboard shows it ranks #1 for image EDITING tasks
+  (adding/removing/stylizing elements in existing images)
+  Score vs. Imagen 3: 1394 vs. 1388 — barely ahead
+- Still behind Imagen 3 for text-to-image generation
+- Won't replace Imagen 3 as Sridev's preference for most workflows
+
+LM Arena explained:
+- Anonymous benchmark: same question → 2 AI responses → user picks better one
+- Neither model is labelled until after you vote
+- Millions of votes → anonymous ranking forms
+- Currently: Claude Opus 4.6 #1 for text, Claude #1 for code
+- Use it to check which model is best for specific tasks
+
+Anthropic: 171 Emotional Representations
+- Research finding: Claude has 171 distinct "emotional states" that affect responses
+- Practical implication for prompting:
+  "Act desperately" → model gives riskier, more extreme responses
+  "Analyze calmly" → model gives more verified, conservative results
+  Adding "please" or being polite → slightly better outputs
+- This is NOT sentience. It's a pattern in how training shaped the weights.
+- Takeaway for students: tonality in your prompt matters.
+  Be specific, be calm, be precise — you'll get better outputs.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — WHAT IS FREEPIK SPACES?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FreePik Spaces = a node-based interface inside FreePik.
+Equivalent to ComfyUI but using proprietary models (Imagen, Kling, etc.)
+
+How to access:
+Left sidebar → Spaces → New Space
+
+Interface overview:
+- Canvas workspace (identical paradigm to ComfyUI)
+- "Add Node" button: opens node library
+- Main nodes: Image Generator, Video Generator, Upload, AI Assistant, Cinematic Shot
+
+Key difference from ComfyUI:
+- No open-source models
+- Faster to use, easier UI
+- Less granular control
+- Cloud-based (your images go to model providers' servers)
+- Cannot be deployed as a standalone app yet (coming soon)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — KEY NODES IN FREEPIK SPACES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMAGE GENERATOR NODE
+- Same as the Image Generator tab from yesterday
+- But now it has input and output connection points
+- Settings: model select, number of outputs, aspect ratio, resolution
+- Add references: drag "upload" node output → connect as image reference
+  (equivalent to IP Adapter reference in ComfyUI)
+- Can stack multiple reference images
+
+VIDEO GENERATOR NODE
+- Select model (Kling 2.5 / Kling 3.0 / CDance / VO3 Lite)
+- Settings: duration, resolution, audio on/off
+- Connect image generator output → video generator input (start image)
+- Output: video file generated
+
+UPLOAD NODE
+- Import any image into the canvas
+- Connect its output to any other node that accepts image input
+
+AI ASSISTANT NODE
+- An LLM node built into the canvas
+- Use case: generate prompts, descriptions, storyboards
+- Feed it context → get structured prompt output → pipe to Image Generator
+
+RUN BUTTON
+- "Run from here" option on any node
+- Runs the entire pipeline from that node forward
+- Full canvas run = "Run" button generates everything
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — BUILDING A UGC VIDEO PIPELINE IN SPACES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What's a UGC (User-Generated Content) ad?
+Raw, iPhone-camera-look, authentic-feeling short video.
+Common format: person holds product, talks to camera casually.
+Brands pay premium for this format because it feels more trustworthy.
+
+Pipeline built in this session:
+
+NODE 1: Upload — product image reference
+NODE 2: Upload — character (girl) reference
+NODE 3: Image Generator (model: Imagen 3 Pro)
+  → References: product + character image
+  → Prompt: "girl in her 20s, smiling, close-up shot, shot from iPhone, holding [product]"
+  → Output: composite image of girl holding product
+
+NODE 4: Video Generator (model: Kling 2.5 or 3.0)
+  → Start image: output from Node 3
+  → Prompt: cinematic shot description, motion, duration
+  → Output: UGC-style video
+
+Total credits for this workflow: ~1,300 credits
+(primarily the video generation; images are cheaper)
+
+Difference from doing it manually:
+Manual = 4 separate steps in FreePik Image Generator tab + Video tab.
+Spaces = all 4 run sequentially with one "Run" click.
+If you need to change the product: swap the Upload node → re-run.
+That's the value of the pipeline.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — PROMPT STRATEGY FOR SPACES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pranay's own workflow for translating ideas to prompts:
+1. Take a regular notepad (real paper) — write the idea down
+2. Conversation with an LLM to flesh out concept
+3. Write a clear structure on paper again
+4. Prompt through FreePik, generate, iterate
+
+LLMs for prompt writing: Claude Sonnet 4.5 (best for content per Pranay)
+LLMs that understand video context well: Meta AI (via meta.ai) — good at
+understanding video and deriving detailed prompts from visual context
+
+Iteration principle:
+"You will never get the output one-shot. You always have to iterate."
+Every generation is a starting point. Expect 3-10 iterations to reach
+a clean output. This is normal. This is the process.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — WHEN COMFYUI vs FREEPIK SPACES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Choose FreePik Spaces when:
+- You need fast production content
+- You want best proprietary models (Imagen, Kling, CDance)
+- You're making UGC videos, product ads, social media content
+- Client delivery workflow with relatively standard outputs
+- No local GPU required
+
+Choose ComfyUI when:
+- Your company has powerful local hardware (RTX 5090, A6000)
+- You need cost-zero generation at scale
+- Data privacy is a concern (sensitive images must not leave internal systems)
+- You need full control over every parameter
+- You want to build apps/products wrapping the pipeline
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Q&A HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Flux open source vs. credits: open source means you can download it locally
+  for free; running it on cloud = you pay for the GPU rental
+- AI influencer vs AI twin: if you use your own face → AI twin, not influencer.
+  AI influencer = no human identity behind it.
+- Credits from cohort may not include commercial licensing; purchase your own plan
+  for commercial rights
+- Auto-pause in JavasLabs: starts a 2-hour countdown from launch, pauses regardless
+  of activity. Set it intentionally.
+- For social media reels: same UGC pipeline works — adjust character behavior/action
+  in prompt to match desired content format
+- AI detectors: Kling 3.0 and CDance 2.0 outputs currently pass most AI detectors
+  as "real video"
+- JavasLabs GPU auto-terminate: possible to set 2-hour limit on instance start
